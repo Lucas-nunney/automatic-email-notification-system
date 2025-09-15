@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View Reminders</title>
+
+  <!-- Tailwind, DaisyUI, Flowbite -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
+
+<div class="fixed inset-0 bg-custom-gray -z-10"></div></div>
+  <style>
+
+      .bg-custom-gray {
+    background-color: #262d39;
+  }
+    body {
+      background-color: #262d39;
+      color: white;
+    }
+
+    .navbar-outline {
+      border-bottom: 4px solid #F6943D;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .reminder-card {
+      background-color: #4B5563;
+      border: 2px solid #374151;
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .reminder-card:hover {
+      border-color: white;
+    }
+
+    .btn-orange {
+      background-color: #F6943D;
+      color: white;
+      border: 2px solid #374151;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-weight: bold;
+    }
+
+    .btn-orange:hover {
+      border-color: white;
+    }
+
+    .px-4 {
+      margin: 0px;
+    }
+    .pb-20 {
+    margin-bottom: 1000px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar bg-gray-700 text-white fixed top-0 left-0 right-0 z-50 navbar-outline py-4 flex items-center px-6">
+    <div class="flex items-center space-x-8">
+
+      <div class="flex space-x-6  text-lg">
+        <a href="/" class="hover:text-gray-300 transition">Add</a>
+        <a href="/view" class="hover:text-gray-300 transition">View</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spacer -->
+  <div class="mt-10"></div>
+
+  <!-- Main Content -->
+  <div class="pb-20 px-4 pt-20  flex justify-center ">
+    <div class="max-w-2xl   w-full bg-gray-700 p-6 rounded shadow-lg">
+
+      <h1 class="text-3xl font-bold mb-6 text-center">Saved Reminders</h1>
+
+      {% if reminders %}
+        <ul class="space-y-6">
+          {% for reminder in reminders %}
+            <li class="reminder-card relative">
+              <p class="text-xl"><strong>Title:</strong> {{ reminder.name }}</p>
+              <p class="text-xl"><strong>Date:</strong> {{ reminder.date }}</p>
+              <p class="text-xl"><strong>Email:</strong> {{ reminder.email }}</p>
+              <p class="text-lg mt-2">
+                <strong>Status:</strong>
+                {% if reminder.sent_today %}
+                  ✅ Sent today
+                {% elif reminder.sent_week_before %}
+                  📅 Week-before reminder sent
+                {% else %}
+                  🕒 Pending
+                {% endif %}
+              </p>
+
+              <!-- Delete Button -->
+              <form action="{{ url_for('delete_reminder', index=loop.index0) }}" method="post" class="absolute top-4 right-4">
+                <button type="submit" class="btn-orange text-sm">Delete</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-lg text-red-400 text-center">No reminders found.</p>
+      {% endif %}
+
+      <!-- Add Another -->
+      <div class="text-center mt-10">
+        <a href="/" class="btn-orange">Add Another Reminder</a>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</body>
+</html>
